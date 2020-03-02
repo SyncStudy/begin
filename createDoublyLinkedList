@@ -1,0 +1,165 @@
+//input num of nodes
+//output number ring doubly linked list
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+ 
+/*  Class Node  */
+class Node
+{
+    protected int data;
+    protected Node next, prev;
+ 
+    /* Constructor */
+    public Node()
+    {
+        next = null;
+        prev = null;
+        data = 0;
+    }
+    /* Constructor */
+    public Node(int d, Node n, Node p)
+    {
+        data = d;
+        next = n;
+        prev = p;
+    }
+    /* Function to set link to next node */
+    public void setLinkNext(Node n)
+    {
+        next = n;
+    }
+    /* Function to set link to previous node */
+    public void setLinkPrev(Node p)
+    {
+        prev = p;
+    }    
+    /* Funtion to get link to next node */
+    public Node getLinkNext()
+    {
+        return next;
+    }
+    /* Function to get link to previous node */
+    public Node getLinkPrev()
+    {
+        return prev;
+    }
+    /* Function to set data to node */
+    public void setData(int d)
+    {
+        data = d;
+    }
+    /* Function to get data from node */
+    public int getData()
+    {
+        return data;
+    }
+}
+ 
+/* Class linkedList */
+class linkedList
+{
+    protected Node start;
+    protected Node end ;
+    public int size;
+ 
+    /* Constructor */
+    public linkedList()
+    {
+        start = null;
+        end = null;
+        size = 0;
+    }
+
+    /*Function to insert element at end */
+    public void insertAtEnd(int val)
+    {
+        Node nptr = new Node(val, null, null);        
+        if (start == null)
+        {
+            nptr.setLinkNext(nptr);
+            nptr.setLinkPrev(nptr);
+            start = nptr;
+            end = start;
+        }
+        else
+        {
+            nptr.setLinkPrev(end);
+            end.setLinkNext(nptr);
+            start.setLinkPrev(nptr);
+            nptr.setLinkNext(start);
+            end = nptr;    
+        }
+        size++;
+    }
+    /* Function to insert element at position */
+  
+   
+    public void display()
+    {
+        System.out.print("\nCircular Doubly Linked List = ");
+        Node ptr = start;
+        if (size == 0) 
+        {
+            System.out.print("empty\n");
+            return;
+        }
+        if (start.getLinkNext() == start) 
+        {
+            System.out.print(start.getData()+ " <-> "+ptr.getData()+ "\n");
+            return;
+        }
+        System.out.print(start.getData()+ " <-> ");
+        ptr = start.getLinkNext();
+        while (ptr.getLinkNext() != start) 
+        {
+            System.out.print(ptr.getData()+ " <-> ");
+            ptr = ptr.getLinkNext();
+        }
+        System.out.print(ptr.getData()+ " <-> ");
+        ptr = ptr.getLinkNext();
+        System.out.print(ptr.getData()+ "\n");
+    }
+}
+ 
+/* Class CircularDoublyLinkedList */
+public class CircularDoublyLinkedList
+{    
+    public static void main(String[] args)
+    {            
+         int number=0;
+        int alpha=3;
+        //Get user input
+        System.out.println("Please input the number of nodes");
+        Scanner scanner = new Scanner(System.in);
+        //Check input
+        if (scanner.hasNextInt())
+        {
+            number = scanner.nextInt();
+        }
+        else
+        {
+            System.out.println("Please input integer only");
+        }
+        //Generate corresponding values. Cite:https://stackoverflow.com/questions/45903585/what-is-optimal-way-to-get-four-unique-random-number-from-0-9
+        
+        List<Integer> digits = IntStream.range(1,(alpha*number+1)).boxed().collect(Collectors.toList());
+        //Guarantee input is not the same
+        Collections.shuffle (digits);
+        //Create ring based doubly linked list
+        //Cite: https://www.sanfoundry.com/java-program-implement-circular-doubly-linked-list/
+        linkedList list = new linkedList(); 
+        for(int i=0;i<number;i++)
+        {
+            list.insertAtEnd(digits.get(i));    
+        }
+        list.display();
+   
+        
+          
+       
+       
+    }
+}
